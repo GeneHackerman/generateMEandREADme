@@ -1,14 +1,26 @@
 // TODO: Include packages needed for this application
 const inquirer = require("inquirer");
 const fs = require("fs");
-// const utils = require("utils");
+// const utils = require("utils"); <-- messaging out as it did not generate
+// questions at command line
 
 const generateMarkdown = require("./utils/generateMarkdown");
 
 // TODO: Create an array of questions for user input
 const questions = 
-    inquirer.prompt ([
-        
+    [
+        {
+            type: 'input',
+            name: 'Username',
+            message: 'What is your GitHub username?',
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;
+                } else {
+                    console.log('Please enter your full name!');
+                }
+            }
+        },        
         {
             type: "input",
             message: "What is the name of your project?",
@@ -55,29 +67,30 @@ const questions =
             name: "Questions"
         },
         {
-            type: 'input',
-            message: 'What is your GitHub username?',
-            name: 'Username'
-        },
-        {
             type: "input",
             message: "What is your email address?",
             name: 'Email'
         }
 
-    ]);
+    ]
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {
-
-    fs.writeFile(fileName, data, function(err) {
-        console.log(fileName)
-        console.log(data)
-        if (err) {
-            return console.log(err)
-        } else {
-            console.log("success")
-        }
+const writeToFile = data => {
+    return new Promise((resolve, reject) => {
+        // makes readme file and add dist to folder
+        fs.writeFile('./dist/README.md', data, err => {
+            // if error, reject promise and send error to .catch() method
+            if (err) {
+                reject (err);
+                // return out of function to make sure promise doesn't continue to execute resolve() function
+                return;
+            }
+            // if all goes well, resolve promise and send successful data to .then() method
+            resolve ({
+                ok: true,
+                message: console.log('Success! Navigate to "dist" folder to see your README!')
+            });
+        })
     })
 }
 
