@@ -62,7 +62,7 @@ const questions =
             type: "input",
             message: "What is your email address?",
             name: 'Email'
-        },
+        }
 
     ]);
 
