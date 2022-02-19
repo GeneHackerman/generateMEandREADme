@@ -11,8 +11,8 @@ const questions =
     [
         {
             type: 'input',
-            name: 'Username',
-            message: 'What is your GitHub username?',
+            name: 'name',
+            message: 'What is your name?',
             validate: nameInput => {
                 if (nameInput) {
                     return true;
@@ -22,19 +22,43 @@ const questions =
             }
         },        
         {
-            type: "input",
-            message: "What is the name of your project?",
-            name: "Title"
+            type: 'input',
+            name: 'github',
+            message: 'Please enter your GitHub username:',
+            validate: githubInput => {
+                if (githubInput) {
+                    return true;
+                } else {
+                    console.log('It is essential to link to your GitHub page so users can view your full repo');
+                    return false;
+                }
+            }
         },
         {
             type: 'input',
-            message: "What is the project about? Give a detailed description of your project.",
-            name: "Description"
+            name: 'email',
+            message: 'Enter your email address:',
+            validate: emailInput => {
+                if (emailInput) {
+                    return true;
+                } else {
+                    console.log('If users have questions about your project, you must provie an email');
+                    return false;
+                }
+            }
         },
         {
-            type: "input",
-            message: "Table of Contents",
-            name: "Table of Contents"
+            type: 'input',
+            name: 'title',
+            message: "What is the title of your project?", 
+            validate: titleInput => {
+                if (titleInput) {
+                    return true;
+                } else {
+                    console.log('Every project must have a title. Please try again.');
+                    return false;
+                }
+            }
         },
         {
             type: "input",
@@ -95,13 +119,18 @@ const writeToFile = data => {
 }
 
 // TODO: Create a function to initialize app
-function init() {
-    inquirer.prompt(questions)
-        .then(function(data) {
-            writeToFile("README.md", generateMarkdown(data));
-            console.log(data)
-        })
+const init = () => {
+    return inquirer.prompt(questions);
 }
 
 // Function call to initialize app
-init();
+init()
+    .then(userInput => {
+        return generateMarkdown(userInput);
+    })
+    .then(readmeInfo => {
+        return writeToFile(readmeInfo);
+    })
+    .catch(err => {
+        console.log(err);
+    })
