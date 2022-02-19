@@ -22,6 +22,8 @@
   Clone the repo to your local machine and run node index.js to prompt questions
 
   ## Licenses
+  Below is a sample of the license function
+  
     This project is covered under the MIT license. To learn more about what this means, click the license button at the top.
 
   ## Contributing
